@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will You Be My Valentine?</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#ff9ec4,#ffd6e8,#ffeef6);
+}
+
+.container{
+    text-align:center;
+    z-index:2;
+}
+
+h1{
+    font-size:3rem;
+    color:#d6336c;
+    margin-bottom:40px;
+    text-shadow:2px 2px 10px rgba(255,255,255,.6);
+}
+
+button{
+    padding:15px 35px;
+    font-size:1.2rem;
+    border:none;
+    border-radius:50px;
+    cursor:pointer;
+    transition:.2s;
+    position:absolute;
+}
+
+#yes{
+    background:#ff4d88;
+    color:white;
+    left:45%;
+    top:60%;
+    box-shadow:0 10px 25px rgba(255,77,136,.3);
+}
+
+#yes:hover{
+    transform:scale(1.1);
+}
+
+#no{
+    background:#666;
+    color:white;
+    left:55%;
+    top:60%;
+}
+
+#message{
+    position:absolute;
+    inset:0;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    background:rgba(255,255,255,.95);
+    z-index:5;
+}
+
+#message h2{
+    font-size:4rem;
+    color:#ff4d88;
+}
+
+#message p{
+    font-size:1.5rem;
+    margin-top:20px;
+}
+
+.heart{
+    position:absolute;
+    color:#ff4d88;
+    font-size:25px;
+    animation:float 5s linear forwards;
+}
+
+@keyframes float{
+    from{
+        transform:translateY(0) scale(1);
+        opacity:1;
+    }
+    to{
+        transform:translateY(-800px) scale(2);
+        opacity:0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>💖 Will you be my Valentine D...? 💖</h1>
+</div>
+
+<button id="yes">Yes ❤️</button>
+<button id="no">No 😢</button>
+
+<div id="message">
+    <h2>YAY!! ❤️🥰</h2>
+    <p>You just made me the happiest person alive! 💕</p>
+</div>
+
+<script>
+
+const noBtn=document.getElementById("no");
+const yesBtn=document.getElementById("yes");
+const message=document.getElementById("message");
+
+// Move the "No" button away from the cursor
+document.addEventListener("mousemove",(e)=>{
+
+    const rect=noBtn.getBoundingClientRect();
+
+    const btnCenterX=rect.left+rect.width/2;
+    const btnCenterY=rect.top+rect.height/2;
+
+    const dx=e.clientX-btnCenterX;
+    const dy=e.clientY-btnCenterY;
+
+    const distance=Math.sqrt(dx*dx+dy*dy);
+
+    if(distance<150){
+
+        const angle=Math.atan2(dy,dx);
+
+        let newX=btnCenterX-Math.cos(angle)*180-rect.width/2;
+        let newY=btnCenterY-Math.sin(angle)*180-rect.height/2;
+
+        newX=Math.max(10,Math.min(window.innerWidth-rect.width-10,newX));
+        newY=Math.max(10,Math.min(window.innerHeight-rect.height-10,newY));
+
+        noBtn.style.left=newX+"px";
+        noBtn.style.top=newY+"px";
+    }
+
+});
+
+// Also move on hover (extra protection 😄)
+noBtn.addEventListener("mouseenter",()=>{
+
+    const x=Math.random()*(window.innerWidth-120);
+    const y=Math.random()*(window.innerHeight-60);
+
+    noBtn.style.left=x+"px";
+    noBtn.style.top=y+"px";
+
+});
+
+// Yes button celebration
+yesBtn.addEventListener("click",()=>{
+
+    message.style.display="flex";
+
+    setInterval(createHeart,200);
+
+});
+
+function createHeart(){
+
+    const heart=document.createElement("div");
+    heart.className="heart";
+    heart.innerHTML="❤️";
+
+    heart.style.left=Math.random()*window.innerWidth+"px";
+    heart.style.top=(window.innerHeight+20)+"px";
+    heart.style.fontSize=(20+Math.random()*30)+"px";
+
+    document.body.appendChild(heart);
+
+    setTimeout(()=>{
+        heart.remove();
+    },5000);
+
+}
+
+</script>
+
+</body>
+</html>
