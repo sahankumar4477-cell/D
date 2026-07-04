@@ -1,197 +1,442 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Will You Be My Valentine?</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Valentine Proposal</title>
+    <style>
+      :root {
+        --pink: #ff4d8d;
+        --red: #ff2e63;
+        --rose: #ff7aa2;
+        --cream: #fff5f8;
+        --shadow: rgba(255, 46, 99, 0.3);
+      }
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
-}
+      * {
+        box-sizing: border-box;
+      }
 
-body{
-    height:100vh;
-    overflow:hidden;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:linear-gradient(135deg,#ff9ec4,#ffd6e8,#ffeef6);
-}
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        padding: 1rem;
+        font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+        color: var(--cream);
+        background: linear-gradient(135deg, #ff4f7a 0%, #ff2e63 35%, #ff124b 100%);
+        position: relative;
+      }
 
-.container{
-    text-align:center;
-    z-index:2;
-}
+      body::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at top left, rgba(255,255,255,0.24), transparent 36%),
+          radial-gradient(circle at bottom right, rgba(255,255,255,0.18), transparent 35%);
+        pointer-events: none;
+      }
 
-h1{
-    font-size:3rem;
-    color:#d6336c;
-    margin-bottom:40px;
-    text-shadow:2px 2px 10px rgba(255,255,255,.6);
-}
+      body::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(rgba(255,255,255,0.12) 1px, transparent 1px);
+        background-size: 18px 18px;
+        opacity: 0.18;
+        pointer-events: none;
+      }
 
-button{
-    padding:15px 35px;
-    font-size:1.2rem;
-    border:none;
-    border-radius:50px;
-    cursor:pointer;
-    transition:.2s;
-    position:absolute;
-}
+      .heart-bg {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
 
-#yes{
-    background:#ff4d88;
-    color:white;
-    left:45%;
-    top:60%;
-    box-shadow:0 10px 25px rgba(255,77,136,.3);
-}
+      .heart-bg span {
+        position: absolute;
+        font-size: 1.5rem;
+        opacity: 0.75;
+        animation: floatHeart 8s linear infinite;
+        filter: drop-shadow(0 0 8px rgba(255,255,255,0.35));
+      }
 
-#yes:hover{
-    transform:scale(1.1);
-}
+      .heart-bg span:nth-child(odd) {
+        animation-duration: 10s;
+      }
 
-#no{
-    background:#666;
-    color:white;
-    left:55%;
-    top:60%;
-}
+      .heart-bg span:nth-child(3n) {
+        animation-duration: 12s;
+      }
 
-#message{
-    position:absolute;
-    inset:0;
-    display:none;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-    background:rgba(255,255,255,.95);
-    z-index:5;
-}
+      .card {
+        position: relative;
+        z-index: 2;
+        width: min(92vw, 760px);
+        padding: 3rem 2rem;
+        border-radius: 32px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.14);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+        border: 1px solid rgba(255,255,255,0.28);
+      }
 
-#message h2{
-    font-size:4rem;
-    color:#ff4d88;
-}
+      h1 {
+        margin: 0 0 1.2rem;
+        font-size: clamp(2rem, 4vw, 3.3rem);
+        line-height: 1.2;
+        letter-spacing: 0.02em;
+        font-family: "Brush Script MT", "Segoe Script", cursive;
+        text-shadow: 0 0 22px rgba(255,255,255,0.22);
+      }
 
-#message p{
-    font-size:1.5rem;
-    margin-top:20px;
-}
+      .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1.25rem;
+        flex-wrap: wrap;
+        margin-top: 1.8rem;
+      }
 
-.heart{
-    position:absolute;
-    color:#ff4d88;
-    font-size:25px;
-    animation:float 5s linear forwards;
-}
+      button {
+        border: none;
+        cursor: pointer;
+        font-size: clamp(1.2rem, 2.4vw, 1.7rem);
+        font-weight: 700;
+        padding: 1rem 1.9rem;
+        border-radius: 999px;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+        box-shadow: 0 12px 24px var(--shadow);
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
 
-@keyframes float{
-    from{
-        transform:translateY(0) scale(1);
-        opacity:1;
-    }
-    to{
-        transform:translateY(-800px) scale(2);
-        opacity:0;
-    }
-}
-</style>
-</head>
+      button:hover {
+        transform: translateY(-4px) scale(1.03);
+      }
 
-<body>
+      .btn-yes {
+        background: linear-gradient(135deg, #ffd0e2, #ff5f8f);
+        color: white;
+        box-shadow: 0 0 0 0 rgba(255,255,255,0.45), 0 12px 28px var(--shadow);
+        animation: glowPulse 1.8s ease-in-out infinite;
+      }
 
-<div class="container">
-    <h1>💖 Will you be my Valentine D...? 💖</h1>
-</div>
+      .btn-yes:hover {
+        box-shadow: 0 0 28px rgba(255,255,255,0.55), 0 16px 36px var(--shadow);
+      }
 
-<button id="yes">Yes ❤️</button>
-<button id="no">No 😢</button>
+      .btn-no {
+        background: linear-gradient(135deg, #ffe6ec, #ff8fa8);
+        color: #7a0b2e;
+        position: fixed;
+        left: 58%;
+        top: 62%;
+        z-index: 20;
+        transition: left 0.28s cubic-bezier(0.22, 1, 0.36, 1), top 0.28s cubic-bezier(0.22, 1, 0.36, 1), transform 0.25s ease, box-shadow 0.25s ease;
+        touch-action: manipulation;
+      }
 
-<div id="message">
-    <h2>YAY!! ❤️🥰</h2>
-    <p>You just made me the happiest person alive! 💕</p>
-</div>
+      .message {
+        margin-top: 1.3rem;
+        font-size: 1.05rem;
+        color: #fff3f6;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all 0.35s ease;
+      }
 
-<script>
+      .message.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
 
-const noBtn=document.getElementById("no");
-const yesBtn=document.getElementById("yes");
-const message=document.getElementById("message");
+      .celebration-overlay {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 41, 89, 0.88);
+        z-index: 999;
+        padding: 1.5rem;
+      }
 
-// Move the "No" button away from the cursor
-document.addEventListener("mousemove",(e)=>{
+      .celebration-overlay.active {
+        display: flex;
+      }
 
-    const rect=noBtn.getBoundingClientRect();
+      .celebration-box {
+        position: relative;
+        text-align: center;
+        max-width: 620px;
+        background: rgba(255,255,255,0.2);
+        border: 1px solid rgba(255,255,255,0.3);
+        border-radius: 28px;
+        padding: 2.3rem;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        animation: popIn 0.5s ease-out;
+      }
 
-    const btnCenterX=rect.left+rect.width/2;
-    const btnCenterY=rect.top+rect.height/2;
+      .celebration-box h2 {
+        font-size: clamp(1.8rem, 3.4vw, 2.8rem);
+        margin: 0 0 0.8rem;
+        text-shadow: 0 0 16px rgba(255,255,255,0.3);
+      }
 
-    const dx=e.clientX-btnCenterX;
-    const dy=e.clientY-btnCenterY;
+      .sparkle {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: white;
+        pointer-events: none;
+        animation: sparkle 1.2s ease-out forwards;
+      }
 
-    const distance=Math.sqrt(dx*dx+dy*dy);
+      .confetti {
+        position: absolute;
+        width: 8px;
+        height: 16px;
+        border-radius: 3px;
+        pointer-events: none;
+        animation: confettiFall 1.4s ease-out forwards;
+      }
 
-    if(distance<150){
+      @keyframes floatHeart {
+        0% {
+          transform: translate3d(0, 100vh, 0) rotate(0deg);
+          opacity: 0;
+        }
+        15% {
+          opacity: 0.75;
+        }
+        100% {
+          transform: translate3d(var(--drift-x, 0px), -10vh, 0) rotate(360deg);
+          opacity: 0;
+        }
+      }
 
-        const angle=Math.atan2(dy,dx);
+      @keyframes glowPulse {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(255,255,255,0.45), 0 12px 28px var(--shadow);
+        }
+        50% {
+          box-shadow: 0 0 32px rgba(255,255,255,0.65), 0 15px 34px var(--shadow);
+        }
+      }
 
-        let newX=btnCenterX-Math.cos(angle)*180-rect.width/2;
-        let newY=btnCenterY-Math.sin(angle)*180-rect.height/2;
+      @keyframes popIn {
+        0% {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
 
-        newX=Math.max(10,Math.min(window.innerWidth-rect.width-10,newX));
-        newY=Math.max(10,Math.min(window.innerHeight-rect.height-10,newY));
+      @keyframes sparkle {
+        0% { transform: scale(0.4); opacity: 1; }
+        100% { transform: scale(2.2) translateY(-18px); opacity: 0; }
+      }
 
-        noBtn.style.left=newX+"px";
-        noBtn.style.top=newY+"px";
-    }
+      @keyframes confettiFall {
+        0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+        100% { transform: translateY(100vh) rotate(540deg); opacity: 0; }
+      }
 
-});
+      @media (max-width: 600px) {
+        .card {
+          padding: 2.3rem 1rem;
+        }
 
-// Also move on hover (extra protection 😄)
-noBtn.addEventListener("mouseenter",()=>{
+        .buttons {
+          gap: 0.75rem;
+        }
 
-    const x=Math.random()*(window.innerWidth-120);
-    const y=Math.random()*(window.innerHeight-60);
+        button {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="heart-bg" aria-hidden="true"></div>
 
-    noBtn.style.left=x+"px";
-    noBtn.style.top=y+"px";
+    <div class="card">
+      <h1>💖 Will you be my Valentine D...? 💖</h1>
+      <div class="buttons">
+        <button class="btn-yes" id="yesBtn">Yes ❤️</button>
+        <button class="btn-no" id="noBtn">No 😢</button>
+      </div>
+      <p class="message" id="message">YAY!! ❤️ You just made me the happiest person alive!</p>
+    </div>
 
-});
+    <div class="celebration-overlay" id="celebrationOverlay" aria-hidden="true">
+      <div class="celebration-box">
+        <h2>YAY!! ❤️ You just made me the happiest person alive!</h2>
+        <p>My heart is glowing with joy 💖</p>
+      </div>
+    </div>
 
-// Yes button celebration
-yesBtn.addEventListener("click",()=>{
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+      // Replace these placeholders with your actual EmailJS values later.
+      const EMAILJS_PUBLIC_KEY = "EMAILJS_PUBLIC_KEY";
+      const EMAILJS_SERVICE_ID = "EMAILJS_SERVICE_ID";
+      const EMAILJS_TEMPLATE_ID = "EMAILJS_TEMPLATE_ID";
 
-    message.style.display="flex";
+      emailjs.init(EMAILJS_PUBLIC_KEY);
 
-    setInterval(createHeart,200);
+      const heartBg = document.querySelector(".heart-bg");
+      const yesBtn = document.getElementById("yesBtn");
+      const noBtn = document.getElementById("noBtn");
+      const message = document.getElementById("message");
+      const celebrationOverlay = document.getElementById("celebrationOverlay");
+      let noMoveFrame = null;
 
-});
+      function createFloatingHearts() {
+        const hearts = ["💖", "💗", "💞", "💓", "💕"];
+        for (let i = 0; i < 24; i += 1) {
+          const span = document.createElement("span");
+          span.textContent = hearts[i % hearts.length];
+          span.style.left = `${Math.random() * 100}%`;
+          span.style.top = `${Math.random() * 100}%`;
+          span.style.setProperty("--drift-x", `${(Math.random() - 0.5) * 220}px`);
+          span.style.animationDelay = `${Math.random() * 6}s`;
+          span.style.fontSize = `${1 + Math.random() * 1.4}rem`;
+          heartBg.appendChild(span);
+        }
+      }
 
-function createHeart(){
+      function createCelebrationBurst(x, y) {
+        for (let i = 0; i < 18; i += 1) {
+          const sparkle = document.createElement("div");
+          sparkle.className = "sparkle";
+          sparkle.style.left = `${x}px`;
+          sparkle.style.top = `${y}px`;
+          sparkle.style.background = ["#fff", "#ffd6e0", "#ffe66d", "#ff7aa2"][i % 4];
+          sparkle.style.setProperty("--sparkle-x", `${(Math.random() - 0.5) * 120}px`);
+          sparkle.style.setProperty("--sparkle-y", `${(Math.random() - 0.5) * 120}px`);
+          celebrationOverlay.appendChild(sparkle);
+          setTimeout(() => sparkle.remove(), 1200);
+        }
 
-    const heart=document.createElement("div");
-    heart.className="heart";
-    heart.innerHTML="❤️";
+        for (let i = 0; i < 16; i += 1) {
+          const confetti = document.createElement("div");
+          confetti.className = "confetti";
+          confetti.style.left = `${x + (Math.random() - 0.5) * 80}px`;
+          confetti.style.top = `${y + (Math.random() - 0.5) * 40}px`;
+          confetti.style.background = ["#fff", "#ffd6e0", "#ff78a6", "#ff3d64"][i % 4];
+          confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+          celebrationOverlay.appendChild(confetti);
+          setTimeout(() => confetti.remove(), 1600);
+        }
+      }
 
-    heart.style.left=Math.random()*window.innerWidth+"px";
-    heart.style.top=(window.innerHeight+20)+"px";
-    heart.style.fontSize=(20+Math.random()*30)+"px";
+      function showCelebration() {
+        celebrationOverlay.classList.add("active");
+        message.classList.add("show");
+        createCelebrationBurst(window.innerWidth / 2, window.innerHeight / 2);
+        setTimeout(() => {
+          celebrationOverlay.classList.remove("active");
+        }, 2400);
+      }
 
-    document.body.appendChild(heart);
+      function sendEmailNotification() {
+        const now = new Date().toLocaleString();
+        const browser = navigator.userAgent;
+        const templateParams = {
+          subject: "She said YES ❤️",
+          message: `Someone clicked the "Yes" button on your Valentine website.\nTime: ${now}\nBrowser: ${browser}`
+        };
 
-    setTimeout(()=>{
-        heart.remove();
-    },5000);
+        emailjs
+          .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+          .then(() => {
+            console.log("Email sent successfully.");
+          })
+          .catch((error) => {
+            console.error("Email sending failed:", error);
+          });
+      }
 
-}
+      yesBtn.addEventListener("click", () => {
+        showCelebration();
+        sendEmailNotification();
+      });
 
-</script>
+      function moveNoButton() {
+        if (noMoveFrame) {
+          cancelAnimationFrame(noMoveFrame);
+        }
 
-</body>
+        noMoveFrame = requestAnimationFrame(() => {
+          const buttonWidth = noBtn.offsetWidth || 140;
+          const buttonHeight = noBtn.offsetHeight || 56;
+          const padding = 16;
+          const maxX = Math.max(padding, window.innerWidth - buttonWidth - padding);
+          const maxY = Math.max(padding, window.innerHeight - buttonHeight - padding);
+          const nextX = padding + Math.random() * (maxX - padding);
+          const nextY = padding + Math.random() * (maxY - padding);
+
+          noBtn.style.position = "fixed";
+          noBtn.style.left = `${nextX}px`;
+          noBtn.style.top = `${nextY}px`;
+        });
+      }
+
+      function handlePointerNearButton(clientX, clientY) {
+        const rect = noBtn.getBoundingClientRect();
+        const distance = Math.hypot(
+          clientX - (rect.left + rect.width / 2),
+          clientY - (rect.top + rect.height / 2)
+        );
+        if (distance < 150) {
+          moveNoButton();
+        }
+      }
+
+      noBtn.addEventListener("mouseenter", moveNoButton);
+      noBtn.addEventListener("mouseover", moveNoButton);
+      noBtn.addEventListener("pointerdown", (event) => {
+        event.preventDefault();
+        moveNoButton();
+      });
+      noBtn.addEventListener("touchstart", (event) => {
+        event.preventDefault();
+        moveNoButton();
+      }, { passive: false });
+
+      window.addEventListener("mousemove", (event) => {
+        handlePointerNearButton(event.clientX, event.clientY);
+      });
+
+      window.addEventListener("touchmove", (event) => {
+        if (event.touches && event.touches.length) {
+          const touch = event.touches[0];
+          handlePointerNearButton(touch.clientX, touch.clientY);
+        }
+      }, { passive: true });
+
+      window.addEventListener("resize", () => {
+        moveNoButton();
+      });
+
+      window.addEventListener("orientationchange", () => {
+        setTimeout(moveNoButton, 120);
+      });
+
+      createFloatingHearts();
+      moveNoButton();
+    </script>
+  </body>
 </html>
